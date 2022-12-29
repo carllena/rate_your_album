@@ -37,9 +37,9 @@ def main():
     http_serve.start()
     print(f"http server listening on `{local_ip}:{c.http_port}`")
     mydb, mycursor = create_cursor()
-    query = "INSERT INTO users (login, name, surname, password) VALUES (%s, %s, %s, %s)"
-    values = ("john123", "John", "Johnson", "johny12")
-    insert_data(mydb, mycursor, query, values)
+    # query = "INSERT INTO users (login, name, surname, password) VALUES (%s, %s, %s, %s)"
+    # values = ("john123", "John", "Johnson", "johny12")
+    # insert_data(mydb, mycursor, query, values)
     res = select_data(mycursor, "SELECT * FROM users;")
     print(res)
 
