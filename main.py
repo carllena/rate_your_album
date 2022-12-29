@@ -1,10 +1,12 @@
 from packages.rest import process_GET_request
 import logging
+import socket
 import json
 from threading import Thread
 import packages.config as c
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from http import HTTPStatus
+from packages.database_controller import create_cursor, select_data
 
 logger = logging.getLogger("logger")
 
@@ -30,9 +32,13 @@ def serve_http(server_class=HTTPServer, handler_class=MyHandler):
 
 
 def main():
-    print("http server starting")
+    local_ip = socket.gethostbyname(socket.gethostname())
     http_serve = Thread(target=serve_http)
     http_serve.start()
+    print(f"http server listening on `{local_ip}:{c.http_port}`")
+    mydb, mycursor = create_cursor()
+    res = select_data(mycursor, "SELECT * FROM users;")
+    print(res)
 
 
 if __name__ == "__main__":
