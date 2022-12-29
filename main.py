@@ -6,7 +6,7 @@ from threading import Thread
 import packages.config as c
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from http import HTTPStatus
-from packages.database_controller import create_cursor, select_data
+from packages.database_controller import create_cursor, select_data, insert_data
 
 logger = logging.getLogger("logger")
 
@@ -37,6 +37,9 @@ def main():
     http_serve.start()
     print(f"http server listening on `{local_ip}:{c.http_port}`")
     mydb, mycursor = create_cursor()
+    query = "INSERT INTO users (login, name, surname, password) VALUES (%s, %s, %s, %s)"
+    values = ("john123", "John", "Johnson", "johny12")
+    insert_data(mydb, mycursor, query, values)
     res = select_data(mycursor, "SELECT * FROM users;")
     print(res)
 

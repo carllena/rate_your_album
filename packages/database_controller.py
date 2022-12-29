@@ -12,3 +12,9 @@ def select_data(mycursor, query):
     mycursor.execute(query)
     myresult = mycursor.fetchall()
     return myresult
+
+
+def insert_data(mydb, mycursor, query, values):
+    mycursor.execute(query, values)
+    mydb.commit()
+    return
