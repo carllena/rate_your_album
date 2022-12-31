@@ -1,103 +1,47 @@
-* {
-  box-sizing: border-box;
-}
-
 body {
   background-image: url("img/background.jpg");
-  font-size: 14px;
+  font-family: Iceberg;
+  margin: 0;
+  justify-content: center;
 }
 
-.v102_6 {
-  width: 70%;
-  height: 100%;
+main {
+  width: 60%;
+  padding: 20px;
   text-align: center;
-  background: rgba(58, 47, 47, 0.9);
-  opacity: 1;
-  position: absolute;
-  top: 0px;
-  left: 246px;
-  overflow: hidden;
+  justify-content: center;
+  margin: 0 auto 0 auto;
+  background-color: rgba(58, 47, 47, 0.9);
 }
-.v105_7 {
-  width: 813px;
+
+.welcome {
+  padding: 80px 50px;
   color: rgba(255, 255, 255, 1);
-  position: absolute;
-  top: 103px;
-  left: 314px;
-  font-family: Iceberg;
-  font-weight: Regular;
   font-size: 64px;
-  opacity: 1;
-  text-align: center;
 }
-.v106_60 {
-  width: 801px;
+
+.welcomeText {
+  padding: 0 20px 50px 20px;
   color: rgba(255, 255, 255, 1);
-  position: absolute;
-  top: 205px;
-  left: 320px;
-  font-family: Iceberg;
-  font-weight: Regular;
   font-size: 28px;
-  opacity: 1;
-  text-align: center;
 }
-.v105_58 {
-  width: 473px;
-  height: 453px;
+
+.loginBox {
+  margin: auto;
+  border-radius: 5%;
+  width: 40%;
   background: rgba(217, 217, 217, 1);
-  opacity: 1;
-  position: absolute;
-  top: 339px;
-  left: 484px;
 }
-.v106_61 {
-  width: 425px;
+.loginText {
+  padding: 10px;
   color: rgba(0, 0, 0, 1);
-  position: absolute;
-  top: 393px;
-  left: 508px;
-  font-family: Iceberg;
-  font-weight: Regular;
-  font-size: 28px;
-  opacity: 1;
-  text-align: center;
+  font-size: 15px;
 }
-.v106_62 {
-  width: 425px;
+
+.loginBtn {
+  padding: 10px;
   color: rgba(0, 0, 0, 1);
-  position: absolute;
-  top: 637px;
-  left: 508px;
-  font-family: Iceberg;
-  font-weight: Regular;
-  font-size: 28px;
-  opacity: 1;
-  text-align: center;
-}
-.v106_63 {
-  width: 198px;
-  color: rgba(0, 0, 0, 1);
-  position: absolute;
-  top: 495px;
-  left: 621px;
   text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
   font-family: Iceland;
-  font-weight: Regular;
-  font-size: 40px;
-  opacity: 1;
-  text-align: center;
-}
-.v106_64 {
-  width: 198px;
-  color: rgba(0, 0, 0, 1);
-  position: absolute;
-  top: 695px;
-  left: 621px;
-  text-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
-  font-family: Iceland;
-  font-weight: Regular;
-  font-size: 40px;
-  opacity: 1;
-  text-align: center;
+  font-size: 30px;
 }
