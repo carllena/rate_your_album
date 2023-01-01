@@ -15,6 +15,10 @@ def select_data(mycursor, query):
 
 
 def insert_data(mydb, mycursor, query, values):
-    mycursor.execute(query, values)
-    mydb.commit()
-    return
+    try:
+        mycursor.execute(query, values)
+        mydb.commit()
+        return True
+    except Exception as e:
+        print(f"Exception: `{e}`")
+    return False

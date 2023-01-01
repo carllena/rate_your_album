@@ -1,4 +1,4 @@
-from packages.rest import process_GET_request
+from packages.rest import process_GET_request, process_POST_request
 import logging
 import socket
 import json
@@ -9,6 +9,7 @@ from http import HTTPStatus
 from packages.database_controller import create_cursor, select_data, insert_data
 
 logger = logging.getLogger("logger")
+mydb, mycursor = create_cursor()
 
 
 class MyHandler(BaseHTTPRequestHandler):
@@ -19,6 +20,28 @@ class MyHandler(BaseHTTPRequestHandler):
         self.end_headers()
         http_status, response = process_GET_request(str(self.path))
         self.wfile.write(bytes(response, "utf-8"))
+        return
+
+    def do_POST(self):
+        logger.debug(f"Got POST request with path: `{self.path}`")
+        method_name = "post"
+        if self.headers["Content-Length"]:
+            self.data_string = self.rfile.read(int(self.headers["Content-Length"]))
+            print(self.data_string)
+            payload = json.loads(self.data_string)
+        else:
+            payload = None
+        print(payload)
+        logger.debug(f"Payload: `{payload}`")
+        path = str(self.path)
+
+        http_status, response = process_POST_request(payload, path)
+        self.send_response(http_status)
+        self.send_header("Content-type", "application/json")
+        self.end_headers()
+        self.wfile.write(bytes(response, "utf-8"))
+        logger.debug(f"Status code: `{http_status}`")
+        logger.debug(f"Response: {response[:254]}")
         return
 
 
@@ -36,7 +59,7 @@ def main():
     http_serve = Thread(target=serve_http)
     http_serve.start()
     print(f"http server listening on `{local_ip}:{c.http_port}`")
-    mydb, mycursor = create_cursor()
+
     # query = "INSERT INTO users (login, name, surname, password) VALUES (%s, %s, %s, %s)"
     # values = ("john123", "John", "Johnson", "johny12")
     # insert_data(mydb, mycursor, query, values)
