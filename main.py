@@ -25,14 +25,24 @@ class MyHandler(BaseHTTPRequestHandler):
 
     def do_GET(self):
         method_name = "get"
-        self.send_response(HTTPStatus.OK)
+        http_status, response = process_GET_request(str(self.path))
+        response_json = {
+            "results": {
+                "method": method_name,
+                "action": str(self.path)[1:],
+                "data": "",
+                "response": response,
+            },
+            "status_code": http_status,
+        }
+        self.send_response(http_status)
         self.send_header("Content-type", "text/html")
         # self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
-        http_status, response = process_GET_request(str(self.path))
+        response_json = json.dumps(response_json)
         self.wfile.write(
             bytes(
-                f"{{'status_code': {http_status}, 'response': '{response}'}}",
+                response_json,
                 "utf-8",
             )
         )
@@ -52,6 +62,15 @@ class MyHandler(BaseHTTPRequestHandler):
         path = str(self.path)
 
         http_status, response = process_POST_request(payload, path)
+        response_json = {
+            "results": {
+                "method": method_name,
+                "action": str(self.path)[1:],
+                "data": payload,
+                "response": response,
+            },
+            "status_code": http_status,
+        }
         self.send_response(http_status)
         self.send_header("Access-Control-Allow-Headers", "*")
         self.send_header("Access-Control-Allow-Origin", "*")
@@ -59,10 +78,10 @@ class MyHandler(BaseHTTPRequestHandler):
         self.send_header("Accept-Encoding", "gzip, deflate")
         # self.send_header("Content-length", self.headers["Content-Length"])
         self.end_headers()
-
+        response_json = json.dumps(response_json)
         self.wfile.write(
             bytes(
-                f"{{'status_code': {http_status}, 'response': '{response}'}}",
+                response_json,
                 "utf-8",
             )
         )
