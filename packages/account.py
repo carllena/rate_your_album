@@ -1,4 +1,4 @@
-from packages.database_controller import insert_data
+from packages.database_controller import insert_data, select_data
 
 
 class Account:
@@ -15,3 +15,11 @@ class Account:
         )
         values = (self.login, self.name, self.surname, self.password)
         return insert_data(mydb, mycursor, query, values)
+
+    def check_login_availability(self, mycursor):
+        query = f"SELECT * FROM users WHERE login = '{self.login}';"
+        result = select_data(mycursor, query)
+        if result:
+            return False
+        else:
+            return True

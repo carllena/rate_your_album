@@ -13,13 +13,29 @@ mydb, mycursor = create_cursor()
 
 
 class MyHandler(BaseHTTPRequestHandler):
+    # BaseHTTPRequestHandler.protocol_version = "HTTP/1.1"
+
+    def do_OPTIONS(self):
+        self.send_response(200, "ok")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Access-Control-Allow-Methods", "GET, OPTIONS, POST")
+        self.send_header("Access-Control-Allow-Headers", "*")
+        self.end_headers()
+        return
+
     def do_GET(self):
         method_name = "get"
         self.send_response(HTTPStatus.OK)
         self.send_header("Content-type", "text/html")
+        # self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         http_status, response = process_GET_request(str(self.path))
-        self.wfile.write(bytes(response, "utf-8"))
+        self.wfile.write(
+            bytes(
+                "{" + f"'status_code': {http_status}, 'response': '{response}'" + "}",
+                "utf-8",
+            )
+        )
         return
 
     def do_POST(self):
@@ -34,12 +50,22 @@ class MyHandler(BaseHTTPRequestHandler):
         print(payload)
         logger.debug(f"Payload: `{payload}`")
         path = str(self.path)
+        self.send_response(HTTPStatus.OK)
+        self.send_header("Access-Control-Allow-Headers", "*")
+        self.send_header("Access-Control-Allow-Origin", "*")
+        self.send_header("Content-type", "application/json")
+        self.send_header("Accept-Encoding", "gzip, deflate")
+        # self.send_header("Content-length", self.headers["Content-Length"])
+        self.end_headers()
 
         http_status, response = process_POST_request(payload, path)
-        self.send_response(http_status)
-        self.send_header("Content-type", "application/json")
-        self.end_headers()
-        self.wfile.write(bytes(response, "utf-8"))
+
+        self.wfile.write(
+            bytes(
+                "{" + f"'status_code': {http_status}, 'response': '{response}'" + "}",
+                "utf-8",
+            )
+        )
         logger.debug(f"Status code: `{http_status}`")
         logger.debug(f"Response: {response[:254]}")
         return

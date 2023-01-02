@@ -3,7 +3,7 @@ from os import getenv
 from setenvs import set
 
 start_time = dt.now()
-name = "rya_api"
+name = "RateYourAlbumAPI"
 version = "1.0.0"
 http_port = int(getenv("HTTPPORT", "5123"))
 
