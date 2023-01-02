@@ -53,7 +53,7 @@ main {
   padding: 50px 20px;
   text-align: center;
   border-radius: 35px;
-  width: 40%;
+  width: 60%;
   background: rgba(217, 217, 217, 1);
 }
 
@@ -101,6 +101,46 @@ button {
   border-color: white;
   padding: 10px;
 }
+
 button:hover {
   opacity: 0.5;
+}
+
+h3 {
+  font-size: 15px;
+}
+
+#message {
+  display: none;
+  width: 70%;
+  background: #f1f1f1;
+  color: #000;
+  padding: 10px;
+  margin: 0 auto 15px auto;
+}
+
+#message p {
+  font-size: 12px;
+}
+
+/* Add a green text color and a checkmark when the requirements are right */
+.valid {
+  color: green;
+}
+
+.valid:before {
+  position: relative;
+  left: -35px;
+  content: "✔";
+}
+
+/* Add a red text color and an "x" icon when the requirements are wrong */
+.invalid {
+  color: red;
+}
+
+.invalid:before {
+  position: relative;
+  left: -35px;
+  content: "✖";
 }
