@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" rel="stylesheet" />
+    <script src="script.js"></script>
     <title>Sign in</title>
     <link
       href="https://fonts.googleapis.com/css?family=Iceberg&display=swap"
@@ -16,8 +17,8 @@
     />
   </head>
   <body>
+    <div class="homePage"><a href="index.html">Return to home page</a></div>
     <main>
-      <div class="homePage"><a href="index.html">Home</a></div>
       <div class="signText">Create new account below:</div>
       <div class="Box">
         <form>
@@ -27,30 +28,43 @@
             id="login"
             name="login"
             placeholder="Enter username"
+            required
           /><br />
           <label for="password">Enter your password:</label><br />
           <input
-            type="text"
+            type="password"
             id="password"
             name="password"
             placeholder="Enter password"
+            required
           /><br />
           <label for="confirmPassword">Confirm your password</label><br />
           <input
-            type="text"
+            type="password"
             id="confirmPassword"
             name="confirmPassword"
             placeholder="Enter your password again"
+            required
           /><br />
           <label for="name">Enter your name:</label><br />
-          <input type="text" id="name" name="name" placeholder="Name" /><br />
+          <input
+            type="text"
+            id="name"
+            name="name"
+            placeholder="Name"
+            required
+          /><br />
           <label for="second">Enter your surname:</label><br />
           <input
             type="text"
             id="surname"
             name="surname"
             placeholder="Surname"
-          />
+            required
+          /><br />
+          <button type="button" onclick="sendDataToCreateAccount()">
+            Create account!
+          </button>
         </form>
       </div>
     </main>

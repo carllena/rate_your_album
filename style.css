@@ -75,7 +75,32 @@ input {
   font-size: 28px;
 }
 
-.homepage {
-  margin: 0;
-  text-align: left !important;
+.homePage {
+  float: left;
+  margin: 20px 30px;
+}
+
+a:link {
+  color: white;
+  text-decoration: none;
+}
+
+a:visited {
+  color: gray;
+}
+
+a:hover {
+  color: rgb(86, 86, 86);
+}
+
+button {
+  color: white;
+  background-color: rgb(86, 86, 86);
+  border-radius: 15px;
+  border-style: solid;
+  border-color: white;
+  padding: 10px;
+}
+button:hover {
+  opacity: 0.5;
 }

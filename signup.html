@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" rel="stylesheet" />
+    <script src="script.js"></script>
     <title>Sign up</title>
     <link
       href="https://fonts.googleapis.com/css?family=Iceberg&display=swap"
@@ -15,5 +16,33 @@
       rel="stylesheet"
     />
   </head>
-  <body></body>
+  <body>
+    <div class="homePage"><a href="index.html">Return to home page</a></div>
+    <main>
+      <div class="signText">Sign up:</div>
+      <div class="Box">
+        <form>
+          <label for="login">Enter your username</label><br />
+          <input
+            type="text"
+            id="login"
+            name="login"
+            placeholder="Enter username"
+            required
+          /><br />
+          <label for="password">Enter your password:</label><br />
+          <input
+            type="password"
+            id="password"
+            name="password"
+            placeholder="Enter password"
+            required
+          /><br />
+          <button type="button" onclick="sendDataToCreateAccount()">
+            Log in
+          </button>
+        </form>
+      </div>
+    </main>
+  </body>
 </html>
