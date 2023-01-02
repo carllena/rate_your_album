@@ -50,15 +50,15 @@ class MyHandler(BaseHTTPRequestHandler):
         print(payload)
         logger.debug(f"Payload: `{payload}`")
         path = str(self.path)
-        self.send_response(HTTPStatus.OK)
+
+        http_status, response = process_POST_request(payload, path)
+        self.send_response(http_status)
         self.send_header("Access-Control-Allow-Headers", "*")
         self.send_header("Access-Control-Allow-Origin", "*")
         self.send_header("Content-type", "application/json")
         self.send_header("Accept-Encoding", "gzip, deflate")
         # self.send_header("Content-length", self.headers["Content-Length"])
         self.end_headers()
-
-        http_status, response = process_POST_request(payload, path)
 
         self.wfile.write(
             bytes(
