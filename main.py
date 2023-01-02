@@ -32,7 +32,7 @@ class MyHandler(BaseHTTPRequestHandler):
         http_status, response = process_GET_request(str(self.path))
         self.wfile.write(
             bytes(
-                "{" + f"'status_code': {http_status}, 'response': '{response}'" + "}",
+                f"{{'status_code': {http_status}, 'response': '{response}'}}",
                 "utf-8",
             )
         )
@@ -62,7 +62,7 @@ class MyHandler(BaseHTTPRequestHandler):
 
         self.wfile.write(
             bytes(
-                "{" + f"'status_code': {http_status}, 'response': '{response}'" + "}",
+                f"{{'status_code': {http_status}, 'response': '{response}'}}",
                 "utf-8",
             )
         )
