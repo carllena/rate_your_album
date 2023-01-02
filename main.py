@@ -53,7 +53,7 @@ class MyHandler(BaseHTTPRequestHandler):
         method_name = "post"
         if self.headers["Content-Length"]:
             self.data_string = self.rfile.read(int(self.headers["Content-Length"]))
-            print(self.data_string)
+            # print(self.data_string)
             payload = json.loads(self.data_string)
         else:
             payload = None
@@ -66,7 +66,7 @@ class MyHandler(BaseHTTPRequestHandler):
             "results": {
                 "method": method_name,
                 "action": str(self.path)[1:],
-                "data": payload,
+                "data": json.dumps(payload),
                 "response": response,
             },
             "status_code": http_status,
