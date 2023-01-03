@@ -20,7 +20,7 @@
     <main>
       <div class="signText">Create new account below:</div>
       <div class="Box">
-        <form>
+        <form name="signup">
           <label for="login">Make your own user name:</label><br />
           <input
             type="text"
@@ -32,15 +32,15 @@
           <label for="password">Enter your password:</label><br />
           <input
             type="password"
-            id="psw"
+            id="password"
             name="password"
             placeholder="Enter password"
             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
             title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
             required
           /><br />
-          <div id="message">
-            <h3>Password must contain the following:</h3>
+          <div id="firstValidate">
+            <p class="pswCheck">Password must contain the following:</p>
             <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
             <p id="capital" class="invalid">
               A <b>capital (uppercase)</b> letter
@@ -56,7 +56,10 @@
             placeholder="Enter your password again"
             required
           /><br />
-
+          <div id="secondValidate">
+            <p id="no" class="invalid">Passwords are not the same!</b></p>
+            <p id="yes" class="valid">Passwords are the same</b></p>
+          </div>
           <label for="name">Enter your name:</label><br />
           <input
             type="text"
@@ -64,16 +67,15 @@
             name="name"
             placeholder="Name"
             required
-          /><br />
+          ><br />
           <label for="second">Enter your surname:</label><br />
           <input
             type="text"
             id="surname"
             name="surname"
             placeholder="Surname"
-            required
-          /><br />
-          <button type="button" onclick="sendDataToCreateAccount()">
+            required="required"><br />
+          <button id="loginBtn" type="button" onclick="alert(1);"">
             Create account!
           </button>
         </form>

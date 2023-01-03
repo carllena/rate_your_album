@@ -32,27 +32,23 @@ function httpGet() {
   console.log(xmlHttp.responseText);
 }
 
-var myInput = document.getElementById("psw");
+var passwordInput = document.getElementById("password");
 var letter = document.getElementById("letter");
 var capital = document.getElementById("capital");
 var number = document.getElementById("number");
 var length = document.getElementById("length");
 
-// When the user clicks on the password field, show the message box
-myInput.onfocus = function () {
-  document.getElementById("message").style.display = "block";
+passwordInput.onfocus = function () {
+  document.getElementById("firstValidate").style.display = "block";
 };
 
-// When the user clicks outside of the password field, hide the message box
-myInput.onblur = function () {
-  document.getElementById("message").style.display = "none";
+passwordInput.onblur = function () {
+  document.getElementById("firstValidate").style.display = "none";
 };
 
-// When the user starts to type something inside the password field
-myInput.onkeyup = function () {
-  // Validate lowercase letters
+passwordInput.onkeyup = function () {
   var lowerCaseLetters = /[a-z]/g;
-  if (myInput.value.match(lowerCaseLetters)) {
+  if (passwordInput.value.match(lowerCaseLetters)) {
     letter.classList.remove("invalid");
     letter.classList.add("valid");
   } else {
@@ -60,9 +56,8 @@ myInput.onkeyup = function () {
     letter.classList.add("invalid");
   }
 
-  // Validate capital letters
   var upperCaseLetters = /[A-Z]/g;
-  if (myInput.value.match(upperCaseLetters)) {
+  if (password.value.match(upperCaseLetters)) {
     capital.classList.remove("invalid");
     capital.classList.add("valid");
   } else {
@@ -70,9 +65,8 @@ myInput.onkeyup = function () {
     capital.classList.add("invalid");
   }
 
-  // Validate numbers
   var numbers = /[0-9]/g;
-  if (myInput.value.match(numbers)) {
+  if (passwordInput.value.match(numbers)) {
     number.classList.remove("invalid");
     number.classList.add("valid");
   } else {
@@ -80,12 +74,54 @@ myInput.onkeyup = function () {
     number.classList.add("invalid");
   }
 
-  // Validate length
-  if (myInput.value.length >= 8) {
+  if (passwordInput.value.length >= 8) {
     length.classList.remove("invalid");
     length.classList.add("valid");
   } else {
     length.classList.remove("valid");
     length.classList.add("invalid");
+  }
+};
+
+// Confirm password validate
+var passwordCheck = document.getElementById("confirmPassword");
+passwordCheck.onkeyup = function () {
+  if (passwordCheck.value == passwordInput.value) {
+    document.getElementById("yes").style.display = "block";
+    document.getElementById("no").style.display = "none";
+  } else {
+    document.getElementById("yes").style.display = "none";
+    document.getElementById("no").style.display = "block";
+  }
+};
+
+passwordCheck.onfocus = function () {
+  document.getElementById("secondValidate").style.display = "block";
+};
+
+passwordCheck.onblur = function () {
+  document.getElementById("secondValidate").style.display = "none";
+};
+
+var loginBtn = document.getElementById("loginBtn");
+
+var login = document.forms["signup"]["login"];
+
+login.onblur = function allFilled() {
+  var login_value = document.forms["signup"]["login"].value;
+  // var password = document.forms["signup"]["password"].value;
+  // var confirmPassword = document.forms["signup"]["confirmPassword"].value;
+  // var name = document.forms["signup"]["name"].value;
+  // var surname = document.forms["signup"]["surname"].value;
+  if (
+    login_value == "" // ||
+    // password == "" ||
+    // confirmPassword == "" ||
+    // name == "" ||
+    // surname == ""
+  ) {
+    document.getElementById("loginBtn").disabled = true;
+  } else {
+    document.getElementById("loginBtn").disabled = false;
   }
 };
