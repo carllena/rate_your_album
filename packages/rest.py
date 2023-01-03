@@ -12,14 +12,6 @@ from packages.database_controller import create_cursor, select_data, insert_data
 logger = logging.getLogger(c.name)
 
 
-def __qparser(path):
-    logger.debug("Parsing PATH")
-    params = parse_qs(urlsplit(path).query)
-    logger.debug(f"Path:: {path}")
-    logger.debug(f"Parsed params:: {params}")
-    return params
-
-
 def process_GET_request(path):
     path = str(path)[1:]
     if path == "health":
@@ -42,8 +34,6 @@ def process_GET_request(path):
 def process_POST_request(payload, path):
     print("-- processing POST request: start")
     mydb, mycursor = create_cursor()
-    parsed_params = __qparser(path)
-    print(f"Params: {parsed_params}")
     print(f"Payload: {payload}")
     if str(path) == "/create_account":
         if "name" in payload:
