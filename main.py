@@ -1,14 +1,51 @@
 from packages.rest import process_GET_request, process_POST_request
+from packages.logger import Logger
 import logging
 import socket
 import json
+import os
 from threading import Thread
 import packages.config as c
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from http import HTTPStatus
 from packages.database_controller import create_cursor, select_data, insert_data
 
-logger = logging.getLogger("logger")
+# ścieżka dla pliku z logami w przypadku stosowania LOGGING_FILE
+LOGFILE = "log/app.log"
+# ile plików ma trzymać wstecz (pliki są tworzone co dobę)
+LOGFILE_COUNT = 7
+# envy do handlerów
+LOGGING_FILE = True if os.getenv("LOGGING_FILE", "false").lower() == "true" else False
+LOGGING_STD = True if os.getenv("LOGGING_STD", "true").lower() == "true" else False
+
+# level logowania (globalny niezależnie od wybranego handlera)
+LOGGING_LEVEL = (
+    logging.DEBUG
+    if os.getenv("LOGGING_LEVEL", "info").lower() == "debug"
+    else logging.INFO
+)
+
+# MAIN
+# -------------------------------------------------------------------------
+
+
+logger = (
+    Logger()
+    .Init(
+        loggerType="std",
+        loggerInit=LOGGING_STD,
+        level=LOGGING_LEVEL,
+        formatterName="formater",
+    )
+    .Init(
+        loggerType="file",
+        loggerInit=LOGGING_FILE,
+        logFile=LOGFILE,
+        logFileCount=LOGFILE_COUNT,
+    )
+    .Get()
+)
+
 mydb, mycursor = create_cursor()
 
 
@@ -53,11 +90,11 @@ class MyHandler(BaseHTTPRequestHandler):
         method_name = "post"
         if self.headers["Content-Length"]:
             self.data_string = self.rfile.read(int(self.headers["Content-Length"]))
-            # print(self.data_string)
+            # logger.info(self.data_string)
             payload = json.loads(self.data_string)
         else:
             payload = None
-        print(payload)
+        logger.info(payload)
         logger.debug(f"Payload: `{payload}`")
         path = str(self.path)
 
@@ -103,13 +140,13 @@ def main():
     local_ip = socket.gethostbyname(socket.gethostname())
     http_serve = Thread(target=serve_http)
     http_serve.start()
-    print(f"http server listening on `{local_ip}:{c.http_port}`")
+    logger.info(f"http server listening on `{local_ip}:{c.http_port}`")
 
     # query = "INSERT INTO users (login, name, surname, password) VALUES (%s, %s, %s, %s)"
     # values = ("john123", "John", "Johnson", "johny12")
     # insert_data(mydb, mycursor, query, values)
     res = select_data(mycursor, "SELECT * FROM users;")
-    print(res)
+    logger.info(res)
 
 
 if __name__ == "__main__":
