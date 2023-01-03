@@ -2,10 +2,10 @@
 #!/usr/bin/python3
 
 import logging, json
+import hashlib
 import packages.config as c
 from datetime import datetime as dt
 from http import HTTPStatus
-from urllib.parse import parse_qs, urlsplit
 from packages.account import Account
 from packages.database_controller import create_cursor, select_data, insert_data
 
@@ -13,6 +13,7 @@ logger = logging.getLogger(c.name)
 
 
 def process_GET_request(path):
+    logger.debug("-- processing GET request: start")
     path = str(path)[1:]
     if path == "health":
         response = json.dumps(
@@ -22,19 +23,23 @@ def process_GET_request(path):
                 "uptime": f"{dt.now() - c.start_time}",
             }
         )
-        print(f"do_GET method: {response}")
+        logger.info(f"do_GET method: {response}")
     else:
         http_status = HTTPStatus.NOT_FOUND
         response = "notfound"
     if response != "notfound":
         http_status = HTTPStatus.OK
+    logger.debug("-- processing GET request: end")
     return http_status, response
 
 
 def process_POST_request(payload, path):
-    print("-- processing POST request: start")
+    logger.debug("-- processing POST request: start")
     mydb, mycursor = create_cursor()
-    print(f"Payload: {payload}")
+    logger.info(f"Payload: {payload}")
+    encoded = payload["password"].encode()
+    payload["password"] = hashlib.sha256(encoded).hexdigest()
+    logger.info(f"Payload: {payload}")
     if str(path) == "/create_account":
         if "name" in payload:
             new_account = Account(
@@ -66,4 +71,5 @@ def process_POST_request(payload, path):
         else:
             response = f"Login is not available"
         http_status = HTTPStatus.OK
+    logger.debug("-- processing POST request: end")
     return http_status, response

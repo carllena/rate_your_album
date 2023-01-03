@@ -1,5 +1,8 @@
 import mysql.connector
-from packages.config import mysql_config
+import logging
+from packages.config import mysql_config, name
+
+logger = logging.getLogger(name)
 
 
 def create_cursor():
@@ -20,5 +23,5 @@ def insert_data(mydb, mycursor, query, values):
         mydb.commit()
         return True
     except Exception as e:
-        print(f"Exception: `{e}`")
+        logger.warning(f"Exception: `{e}`")
     return False
