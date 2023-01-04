@@ -1,12 +1,22 @@
-async function sendDataToCreateAccount() {
+async function sendDataToCreateAccount(
+  endpoint,
+  loginInput,
+  passwordInput,
+  nameInput,
+  surnameInput
+) {
   var user = {
-    login: document.getElementById("login").value,
-    password: document.getElementById("password").value,
-    name: document.getElementById("name").value,
-    surname: document.getElementById("surname").value,
+    // login: document.getElementById("login").value,
+    // password: document.getElementById("password").value,
+    // name: document.getElementById("name").value,
+    // surname: document.getElementById("surname").value,
+    login: loginInput,
+    password: passwordInput,
+    name: nameInput,
+    surname: surnameInput,
   };
   user = JSON.stringify(user);
-  const response = await fetch("http://192.168.0.220:5123/create_account", {
+  const response = await fetch(endpoint, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -101,27 +111,4 @@ passwordCheck.onfocus = function () {
 
 passwordCheck.onblur = function () {
   document.getElementById("secondValidate").style.display = "none";
-};
-
-var loginBtn = document.getElementById("loginBtn");
-
-var login = document.forms["signup"]["login"];
-
-login.onblur = function allFilled() {
-  var login_value = document.forms["signup"]["login"].value;
-  // var password = document.forms["signup"]["password"].value;
-  // var confirmPassword = document.forms["signup"]["confirmPassword"].value;
-  // var name = document.forms["signup"]["name"].value;
-  // var surname = document.forms["signup"]["surname"].value;
-  if (
-    login_value == "" // ||
-    // password == "" ||
-    // confirmPassword == "" ||
-    // name == "" ||
-    // surname == ""
-  ) {
-    document.getElementById("loginBtn").disabled = true;
-  } else {
-    document.getElementById("loginBtn").disabled = false;
-  }
 };

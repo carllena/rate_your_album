@@ -67,6 +67,14 @@ input {
   padding: 10px;
 }
 
+#showPsw {
+  margin: -20px;
+}
+
+.smallLabel {
+  font-size: 13px;
+}
+
 .signText {
   width: 70%;
   margin: auto;
@@ -104,6 +112,11 @@ button {
 
 button:hover {
   opacity: 0.5;
+}
+
+button:disabled {
+  background-color: rgb(189, 189, 189);
+  border-color: black;
 }
 
 .pswCheck {

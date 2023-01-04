@@ -5,6 +5,7 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" rel="stylesheet" />
+    <script src="validate.js"></script>
     <title>Sign in</title>
     <link
       href="https://fonts.googleapis.com/css?family=Iceberg&display=swap"
@@ -20,13 +21,14 @@
     <main>
       <div class="signText">Create new account below:</div>
       <div class="Box">
-        <form name="signup">
+        <form name="signup" onmousemove="empty()">
           <label for="login">Make your own user name:</label><br />
           <input
             type="text"
             id="login"
             name="login"
             placeholder="Enter username"
+            onblur="empty()"
             required
           /><br />
           <label for="password">Enter your password:</label><br />
@@ -37,8 +39,16 @@
             placeholder="Enter password"
             pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
             title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
+            onblur="empty()"
             required
           /><br />
+          <input
+            id="showPass"
+            name="showPass"
+            type="checkbox"
+            onclick="showPsw()"
+          /><label class="smallLabel" for="showPass">Show Password</label>
+          <br />
           <div id="firstValidate">
             <p class="pswCheck">Password must contain the following:</p>
             <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
@@ -54,11 +64,12 @@
             id="confirmPassword"
             name="confirmPassword"
             placeholder="Enter your password again"
+            onblur="empty()"
             required
           /><br />
           <div id="secondValidate">
-            <p id="no" class="invalid">Passwords are not the same!</b></p>
-            <p id="yes" class="valid">Passwords are the same</b></p>
+            <p id="no" class="invalid">Passwords are not the same!</p>
+            <p id="yes" class="valid">Passwords are the same</p>
           </div>
           <label for="name">Enter your name:</label><br />
           <input
@@ -66,18 +77,19 @@
             id="name"
             name="name"
             placeholder="Name"
+            onblur="empty()"
             required
-          ><br />
+          /><br />
           <label for="second">Enter your surname:</label><br />
           <input
             type="text"
             id="surname"
             name="surname"
             placeholder="Surname"
-            required="required"><br />
-          <button id="loginBtn" type="button" onclick="alert(1);"">
-            Create account!
-          </button>
+            onblur="empty()"
+            required
+          /><br />
+          <button id="loginBtn" type="button" disabled>Create account!</button>
         </form>
       </div>
     </main>
