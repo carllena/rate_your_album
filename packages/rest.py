@@ -2,10 +2,10 @@
 #!/usr/bin/python3
 
 import logging, json
-import hashlib
 import packages.config as c
 from datetime import datetime as dt
 from http import HTTPStatus
+from packages.utils import hide_the_pass
 from packages.account import Account
 from packages.database_controller import create_cursor, select_data, insert_data
 
@@ -33,23 +33,23 @@ def process_GET_request(path):
     return http_status, response
 
 
-def process_POST_request(payload, path):
+def process_POST_request(payload, path, client_ip):
     logger.debug("-- processing POST request: start")
     mydb, mycursor = create_cursor()
     logger.info(f"Payload: {payload}")
-    encoded = payload["password"].encode()
-    payload["password"] = hashlib.sha256(encoded).hexdigest()
+    payload["password"] = hide_the_pass(payload["password"], payload["login"])
     logger.info(f"Payload: {payload}")
     if str(path) == "/create_account":
+        if client_ip in c.registration_reject_list:
+            return HTTPStatus.BAD_REQUEST, "Account not created"
         if "name" in payload:
             new_account = Account(
                 payload["login"],
                 payload["name"],
                 payload["surname"],
                 payload["password"],
-                None,
             )
-            if new_account.create_account(mydb, mycursor):
+            if new_account.create_account(mydb, mycursor, client_ip):
                 response = f"Account created correctly"
                 http_status = HTTPStatus.OK
             else:
@@ -64,12 +64,24 @@ def process_POST_request(payload, path):
             None,
             None,
             None,
-            None,
         )
         if new_account.check_login_availability(mycursor):
             response = f"Login is available"
         else:
             response = f"Login is not available"
         http_status = HTTPStatus.OK
+    elif str(path) == "/auth":
+        new_account = Account(
+            payload["login"],
+            None,
+            None,
+            payload["password"],
+        )
+        if new_account.authenticate(mycursor):
+            response = "Authorized"
+            http_status = HTTPStatus.OK
+        else:
+            response = "Bad Login or Password"
+            http_status = HTTPStatus.BAD_REQUEST
     logger.debug("-- processing POST request: end")
     return http_status, response

@@ -1,9 +1,11 @@
 from packages.rest import process_GET_request, process_POST_request
+from requests import get
 from packages.logger import Logger
 import logging
 import socket
 import json
 import os
+from time import sleep
 from threading import Thread
 import packages.config as c
 from http.server import BaseHTTPRequestHandler, HTTPServer
@@ -46,11 +48,13 @@ logger = (
     .Get()
 )
 
-mydb, mycursor = create_cursor()
+# mydb, mycursor = create_cursor()
 
 
 class MyHandler(BaseHTTPRequestHandler):
     # BaseHTTPRequestHandler.protocol_version = "HTTP/1.1"
+    def log_message(self, format, *args):
+        return
 
     def do_OPTIONS(self):
         self.send_response(200, "ok")
@@ -74,6 +78,7 @@ class MyHandler(BaseHTTPRequestHandler):
         }
         self.send_response(http_status)
         self.send_header("Content-type", "text/html")
+        # print(self.client_address[0])
         # self.send_header("Access-Control-Allow-Origin", "*")
         self.end_headers()
         response_json = json.dumps(response_json)
@@ -92,18 +97,21 @@ class MyHandler(BaseHTTPRequestHandler):
             self.data_string = self.rfile.read(int(self.headers["Content-Length"]))
             # logger.info(self.data_string)
             payload = json.loads(self.data_string)
+            data = json.dumps(payload)
         else:
             payload = None
         logger.info(payload)
         logger.debug(f"Payload: `{payload}`")
         path = str(self.path)
 
-        http_status, response = process_POST_request(payload, path)
+        http_status, response = process_POST_request(
+            payload, path, self.client_address[0]
+        )
         response_json = {
             "results": {
                 "method": method_name,
                 "action": str(self.path)[1:],
-                "data": json.dumps(payload),
+                "data": data,
                 "response": response,
             },
             "status_code": http_status,
@@ -136,17 +144,32 @@ def serve_http(server_class=HTTPServer, handler_class=MyHandler):
         httpd.socket.close()
 
 
+def update_rejectlist():
+    # select do bazy
+    while True:
+        result = ["1.168.1.2", "192.168.0.227"]
+        c.registration_reject_list = result
+        logger.info(f"rejectlist updadet: {c.registration_reject_list}")
+        sleep(10)
+
+
 def main():
     local_ip = socket.gethostbyname(socket.gethostname())
+    print(c.registration_reject_list)
     http_serve = Thread(target=serve_http)
     http_serve.start()
     logger.info(f"http server listening on `{local_ip}:{c.http_port}`")
+    rejectlist_updater = Thread(target=update_rejectlist)
+    rejectlist_updater.start()
+    while True:
+        print(c.registration_reject_list)
+        sleep(10)
 
     # query = "INSERT INTO users (login, name, surname, password) VALUES (%s, %s, %s, %s)"
     # values = ("john123", "John", "Johnson", "johny12")
     # insert_data(mydb, mycursor, query, values)
-    res = select_data(mycursor, "SELECT * FROM users;")
-    logger.info(res)
+    # res = select_data(mycursor, "SELECT * FROM users;")
+    # logger.info(res)
 
 
 if __name__ == "__main__":

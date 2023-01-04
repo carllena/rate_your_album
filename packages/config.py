@@ -15,3 +15,5 @@ mysql_config = {
     "database": getenv("DB_DATABASE", ""),
     "port": 3306,
 }
+
+registration_reject_list = ["192.168.1.2", "192.168.0.220"]
