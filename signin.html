@@ -5,7 +5,6 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" rel="stylesheet" />
-    <script src="validate.js"></script>
     <title>Sign in</title>
     <link
       href="https://fonts.googleapis.com/css?family=Iceberg&display=swap"
@@ -77,22 +76,35 @@
             id="name"
             name="name"
             placeholder="Name"
+            pattern="^[a-zA-Z]+$"
             onblur="empty()"
             required
           /><br />
-          <label for="second">Enter your surname:</label><br />
+          <div id="nameValidate">
+            <p id="nameValid" class="invalid">
+              Name cannot contains numbers or special characters!
+            </p>
+          </div>
+          <label for="second">Enter your lastname:</label><br />
           <input
             type="text"
-            id="surname"
-            name="surname"
-            placeholder="Surname"
+            id="lastname"
+            name="lastname"
+            pattern="^[a-zA-Z]+$"
+            placeholder="lastname"
             onblur="empty()"
             required
           /><br />
+          <div id="lastnameValidate">
+            <p id="lastnameValid" class="invalid">
+              Lastname cannot contains numbers or special characters!
+            </p>
+          </div>
           <button id="loginBtn" type="button" disabled>Create account!</button>
         </form>
       </div>
     </main>
   </body>
   <script src="script.js"></script>
+  <script src="validate.js"></script>
 </html>

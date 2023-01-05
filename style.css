@@ -57,6 +57,10 @@ main {
   background: rgba(217, 217, 217, 1);
 }
 
+#password {
+  margin: 10px auto 0 auto;
+}
+
 input {
   background-color: black;
   color: white;
@@ -65,10 +69,6 @@ input {
   border-color: white;
   margin: 10px auto 25px auto;
   padding: 10px;
-}
-
-#showPsw {
-  margin: -20px;
 }
 
 .smallLabel {
@@ -123,7 +123,10 @@ button:disabled {
   font-size: 15px;
 }
 
-#firstValidate {
+#firstValidate,
+#secondValidate,
+#nameValidate,
+#lastnameValidate {
   display: none;
   width: 70%;
   background: #f1f1f1;
@@ -132,20 +135,10 @@ button:disabled {
   margin: 0 auto 15px auto;
 }
 
-#firstValidate p {
-  font-size: 12px;
-}
-
-#secondValidate {
-  display: none;
-  width: 70%;
-  background: #f1f1f1;
-  color: #000;
-  padding: 10px;
-  margin: 0 auto 15px auto;
-}
-
-#secondValidate p {
+#firstValidate p,
+#secondValidate p,
+#nameValidate p,
+#lastnameValidate p {
   font-size: 12px;
 }
 
@@ -160,7 +153,7 @@ button:disabled {
 
 .valid:before {
   position: relative;
-  left: -35px;
+  left: -15px;
   content: "✔";
 }
 
@@ -171,6 +164,6 @@ button:disabled {
 
 .invalid:before {
   position: relative;
-  left: -35px;
+  left: -15px;
   content: "✖";
 }
