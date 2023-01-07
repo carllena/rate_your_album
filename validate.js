@@ -11,16 +11,11 @@ function empty() {
   if (
     passwordLvl < 4 ||
     password != confirmPassword ||
-    login == "" ||
-    login == null ||
-    password == "" ||
-    password == null ||
-    confirmPassword == "" ||
-    confirmPassword == null ||
-    firstname == "" ||
-    firstname == null ||
-    lastname == "" ||
-    lastname == null
+    !login ||
+    !password ||
+    !confirmPassword ||
+    !firstname ||
+    !lastname
   ) {
     document.getElementById("loginBtn").disabled = true;
   } else {
@@ -41,7 +36,7 @@ var nameInput = document.getElementById("name");
 var lastnameInput = document.getElementById("lastname");
 
 nameInput.onkeyup = function () {
-  var letters = /[a-zA-Z]+$/;
+  var letters = /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/;
   if (!nameInput.value.match(letters)) {
     document.getElementById("nameValidate").style.display = "block";
   } else {
@@ -50,7 +45,7 @@ nameInput.onkeyup = function () {
 };
 
 lastnameInput.onkeyup = function () {
-  var letters = /[a-zA-Z]+$/;
+  var letters = /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/;
   if (!lastnameInput.value.match(letters)) {
     document.getElementById("lastnameValidate").style.display = "block";
   } else {
@@ -120,6 +115,15 @@ passwordInput.onkeyup = function () {
 // Confirm password validate
 var passwordCheck = document.getElementById("confirmPassword");
 passwordCheck.onkeyup = function () {
+  if (passwordCheck.value == passwordInput.value) {
+    document.getElementById("yes").style.display = "block";
+    document.getElementById("no").style.display = "none";
+  } else {
+    document.getElementById("yes").style.display = "none";
+    document.getElementById("no").style.display = "block";
+  }
+};
+passwordInput.onkeyup = function () {
   if (passwordCheck.value == passwordInput.value) {
     document.getElementById("yes").style.display = "block";
     document.getElementById("no").style.display = "none";
