@@ -32,7 +32,7 @@ async function sendDataToCreateAccount(
 
 function httpGet() {
   var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", "http://192.168.0.220:5123/health", false); // false for synchronous request
+  xmlHttp.open("GET", "http://192.168.0.222:5123/health", false); // false for synchronous request
   xmlHttp.setRequestHeader("Access-Control-Allow-Origin", "*");
   xmlHttp.setRequestHeader("Access-Control-Allow-Headers", "*");
   xmlHttp.setRequestHeader("Accept", "text/plain");

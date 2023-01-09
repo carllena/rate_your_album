@@ -123,6 +123,7 @@ button:disabled {
   font-size: 15px;
 }
 
+#loginAvailability,
 #firstValidate,
 #secondValidate,
 #nameValidate,
@@ -135,6 +136,7 @@ button:disabled {
   margin: 0 auto 15px auto;
 }
 
+#loginAvailability p,
 #firstValidate p,
 #secondValidate p,
 #nameValidate p,

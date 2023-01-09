@@ -5,7 +5,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="style.css" rel="stylesheet" />
-    <title>Sign in</title>
+    <script src="script.js"></script>
+    <title>Sign up</title>
     <link
       href="https://fonts.googleapis.com/css?family=Iceberg&display=swap"
       rel="stylesheet"
@@ -18,16 +19,15 @@
   <body>
     <div class="homePage"><a href="index.html">Return to home page</a></div>
     <main>
-      <div class="signText">Create new account below:</div>
+      <div class="signText">Sign in:</div>
       <div class="Box">
-        <form name="signup" onmousemove="empty()">
-          <label for="login">Make your own user name:</label><br />
+        <form>
+          <label for="login">Enter your username</label><br />
           <input
             type="text"
             id="login"
             name="login"
             placeholder="Enter username"
-            onblur="empty()"
             required
           /><br />
           <label for="password">Enter your password:</label><br />
@@ -35,78 +35,14 @@
             type="password"
             id="password"
             name="password"
-            class="passwordInput"
             placeholder="Enter password"
-            pattern="(?=.*\d)(?=.*[a-z])(?=.*[A-Z]).{8,}"
-            title="Must contain at least one number and one uppercase and lowercase letter, and at least 8 or more characters"
-            onblur="empty()"
             required
           /><br />
-          <input
-            id="showPass"
-            name="showPass"
-            type="checkbox"
-            onclick="showPsw()"
-          /><label class="smallLabel" for="showPass">Show Password</label>
-          <br />
-          <div id="firstValidate">
-            <p class="pswCheck">Password must contain the following:</p>
-            <p id="letter" class="invalid">A <b>lowercase</b> letter</p>
-            <p id="capital" class="invalid">
-              A <b>capital (uppercase)</b> letter
-            </p>
-            <p id="number" class="invalid">A <b>number</b></p>
-            <p id="length" class="invalid">Minimum <b>8 characters</b></p>
-          </div>
-          <label for="confirmPassword">Confirm your password</label><br />
-          <input
-            type="password"
-            id="confirmPassword"
-            name="confirmPassword"
-            class="passwordInput"
-            placeholder="Enter your password again"
-            onblur="empty()"
-            required
-          /><br />
-          <div id="secondValidate">
-            <p id="no" class="invalid">Passwords are not the same!</p>
-            <p id="yes" class="valid">Passwords are the same</p>
-          </div>
-          <label for="name">Enter your name:</label><br />
-          <input
-            type="text"
-            id="name"
-            name="name"
-            placeholder="Name"
-            pattern="^[a-zA-Z]+$"
-            onblur="empty()"
-            required
-          /><br />
-          <div id="nameValidate">
-            <p id="nameValid" class="invalid">
-              Name cannot contains numbers or special characters!
-            </p>
-          </div>
-          <label for="second">Enter your lastname:</label><br />
-          <input
-            type="text"
-            id="lastname"
-            name="lastname"
-            pattern="^[a-zA-Z]+$"
-            placeholder="lastname"
-            onblur="empty()"
-            required
-          /><br />
-          <div id="lastnameValidate">
-            <p id="lastnameValid" class="invalid">
-              Lastname cannot contains numbers or special characters!
-            </p>
-          </div>
-          <button id="loginBtn" type="button" disabled>Create account!</button>
+          <button type="button" onclick="sendDataToCreateAccount()">
+            Log in
+          </button>
         </form>
       </div>
     </main>
   </body>
-  <script src="script.js"></script>
-  <script src="validate.js"></script>
 </html>

@@ -1,4 +1,48 @@
 var loginBtn = document.getElementById("loginBtn");
+var loginInput = document.getElementById("login");
+var loginAvail = document.getElementById("loginAvailability");
+
+loginInput.onblur = function () {
+  document.getElementById("loginAvailability").style.display = "none";
+};
+
+loginInput.onkeyup = async function () {
+  document.getElementById("loginAvailability").style.display = "block";
+
+  if (loginInput.value.length > 4) {
+    var loginDict = {
+      login: loginInput.value,
+    };
+    loginDict = JSON.stringify(loginDict);
+    const response = await fetch("http://192.168.0.222:5123/free_login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "*",
+      },
+      body: loginDict,
+    });
+    response.json().then((data) => {
+      console.log(data.status_code);
+      if (data.status_code == 400) {
+        document.getElementById("availability").classList.remove("valid");
+        document.getElementById("availability").classList.add("invalid");
+        document.getElementById("availability").innerHTML =
+          data.results.response;
+      } else {
+        document.getElementById("availability").classList.remove("invalid");
+        document.getElementById("availability").classList.add("valid");
+        document.getElementById("availability").innerHTML =
+          data.results.response;
+      }
+    });
+  } else {
+    document.getElementById("availability").innerHTML = "Login is too short";
+    document.getElementById("availability").classList.remove("valid");
+    document.getElementById("availability").classList.add("invalid");
+  }
+};
 
 var passwordLvl = 0;
 
