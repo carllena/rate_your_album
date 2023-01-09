@@ -20,7 +20,7 @@
     <main>
       <div class="signText">Create new account below:</div>
       <div class="Box">
-        <form name="signup" onmousemove="empty()">
+        <form name="signup" id="signup" onmousemove="empty()">
           <label for="login">Make your own user name:</label><br />
           <input
             type="text"
@@ -83,6 +83,7 @@
             placeholder="Name"
             pattern="^[a-zA-Z]+$"
             onblur="empty()"
+            onkeyup="validateName()"
             required
           /><br />
           <div id="nameValidate">
@@ -98,6 +99,7 @@
             pattern="^[a-zA-Z]+$"
             placeholder="lastname"
             onblur="empty()"
+            onkeyup="validateName()"
             required
           /><br />
           <div id="lastnameValidate">
@@ -105,7 +107,14 @@
               Lastname cannot contains numbers or special characters!
             </p>
           </div>
-          <button id="loginBtn" type="button" disabled>Create account!</button>
+          <button
+            id="registerBtn"
+            type="button"
+            disabled
+            onclick="processCreatingAccount()"
+          >
+            Create account!
+          </button>
         </form>
       </div>
     </main>

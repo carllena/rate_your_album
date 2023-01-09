@@ -1,4 +1,4 @@
-var loginBtn = document.getElementById("loginBtn");
+var registerBtn = document.getElementById("registerBtn");
 var loginInput = document.getElementById("login");
 var loginAvail = document.getElementById("loginAvailability");
 
@@ -14,7 +14,7 @@ loginInput.onkeyup = async function () {
       login: loginInput.value,
     };
     loginDict = JSON.stringify(loginDict);
-    const response = await fetch("http://192.168.0.222:5123/free_login", {
+    const response = await fetch("http://192.168.0.220:5123/free_login", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
@@ -46,12 +46,15 @@ loginInput.onkeyup = async function () {
 
 var passwordLvl = 0;
 
+// Jak ktoś ma w imieniu 6 to i tak może przesłać dane. xD
+
 function empty() {
   var login = document.forms["signup"]["login"].value;
   var password = document.forms["signup"]["password"].value;
   var confirmPassword = document.forms["signup"]["confirmPassword"].value;
   var firstname = document.forms["signup"]["name"].value;
   var lastname = document.forms["signup"]["lastname"].value;
+  console.log(passwordLvl);
   if (
     passwordLvl < 4 ||
     password != confirmPassword ||
@@ -61,9 +64,9 @@ function empty() {
     !firstname ||
     !lastname
   ) {
-    document.getElementById("loginBtn").disabled = true;
+    document.getElementById("registerBtn").disabled = true;
   } else {
-    document.getElementById("loginBtn").disabled = false;
+    document.getElementById("registerBtn").disabled = false;
   }
 }
 
@@ -79,23 +82,19 @@ function showPsw() {
 var nameInput = document.getElementById("name");
 var lastnameInput = document.getElementById("lastname");
 
-nameInput.onkeyup = function () {
+function validateName() {
   var letters = /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/;
   if (!nameInput.value.match(letters)) {
     document.getElementById("nameValidate").style.display = "block";
   } else {
     document.getElementById("nameValidate").style.display = "none";
   }
-};
-
-lastnameInput.onkeyup = function () {
-  var letters = /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/;
   if (!lastnameInput.value.match(letters)) {
     document.getElementById("lastnameValidate").style.display = "block";
   } else {
     document.getElementById("lastnameValidate").style.display = "none";
   }
-};
+}
 
 var passwordInput = document.getElementById("password");
 var letter = document.getElementById("letter");
@@ -112,6 +111,7 @@ passwordInput.onblur = function () {
 };
 
 passwordInput.onkeyup = function () {
+  passwordLvl = 0;
   var lowerCaseLetters = /[a-z]/g;
   if (passwordInput.value.match(lowerCaseLetters)) {
     letter.classList.remove("invalid");
@@ -120,7 +120,6 @@ passwordInput.onkeyup = function () {
   } else {
     letter.classList.remove("valid");
     letter.classList.add("invalid");
-    passwordLvl--;
   }
 
   var upperCaseLetters = /[A-Z]/g;
@@ -131,7 +130,6 @@ passwordInput.onkeyup = function () {
   } else {
     capital.classList.remove("valid");
     capital.classList.add("invalid");
-    passwordLvl--;
   }
 
   var numbers = /[0-9]/g;
@@ -142,7 +140,6 @@ passwordInput.onkeyup = function () {
   } else {
     number.classList.remove("valid");
     number.classList.add("invalid");
-    passwordLvl--;
   }
 
   if (passwordInput.value.length >= 8) {
@@ -152,7 +149,14 @@ passwordInput.onkeyup = function () {
   } else {
     length.classList.remove("valid");
     length.classList.add("invalid");
-    passwordLvl--;
+  }
+
+  if (passwordCheck.value == passwordInput.value) {
+    document.getElementById("yes").style.display = "block";
+    document.getElementById("no").style.display = "none";
+  } else {
+    document.getElementById("yes").style.display = "none";
+    document.getElementById("no").style.display = "block";
   }
 };
 
@@ -167,15 +171,15 @@ passwordCheck.onkeyup = function () {
     document.getElementById("no").style.display = "block";
   }
 };
-passwordInput.onkeyup = function () {
-  if (passwordCheck.value == passwordInput.value) {
-    document.getElementById("yes").style.display = "block";
-    document.getElementById("no").style.display = "none";
-  } else {
-    document.getElementById("yes").style.display = "none";
-    document.getElementById("no").style.display = "block";
-  }
-};
+// passwordInput.onkeyup = function () {
+//   if (passwordCheck.value == passwordInput.value) {
+//     document.getElementById("yes").style.display = "block";
+//     document.getElementById("no").style.display = "none";
+//   } else {
+//     document.getElementById("yes").style.display = "none";
+//     document.getElementById("no").style.display = "block";
+//   }
+// };
 
 passwordCheck.onfocus = function () {
   document.getElementById("secondValidate").style.display = "block";

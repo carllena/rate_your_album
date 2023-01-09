@@ -1,4 +1,23 @@
-async function sendDataToCreateAccount(
+function processCreatingAccount() {
+  var loginInput = document.getElementById("login").value;
+  var passwordInput = document.getElementById("password").value;
+  var nameInput = document.getElementById("name").value;
+  var surnameInput = document.getElementById("lastname").value;
+  // przyjąć wartość kodu z funkcji createAccount np. let responseCode
+  createAccount(
+    "http://192.168.0.220:5123/create_account",
+    loginInput,
+    passwordInput,
+    nameInput,
+    surnameInput
+  );
+  //if responseCode coś tam to przekierowanie na stronę logowania
+  //w przeciwnym razie czy jest potrzeba coś robić? może tylko reset formularza
+
+  document.getElementById("signup").reset();
+}
+
+async function createAccount(
   endpoint,
   loginInput,
   passwordInput,
@@ -28,16 +47,17 @@ async function sendDataToCreateAccount(
   response.json().then((data) => {
     console.log(data);
   });
+  //return code od serwera
 }
 
-function httpGet() {
-  var xmlHttp = new XMLHttpRequest();
-  xmlHttp.open("GET", "http://192.168.0.222:5123/health", false); // false for synchronous request
-  xmlHttp.setRequestHeader("Access-Control-Allow-Origin", "*");
-  xmlHttp.setRequestHeader("Access-Control-Allow-Headers", "*");
-  xmlHttp.setRequestHeader("Accept", "text/plain");
-  xmlHttp.setRequestHeader("Content-Type", "text/plain");
-  xmlHttp.send(null);
-  // return xmlHttp.responseText;
-  console.log(xmlHttp.responseText);
-}
+// function httpGet() {
+//   var xmlHttp = new XMLHttpRequest();
+//   xmlHttp.open("GET", "http://192.168.0.220:5123/health", false); // false for synchronous request
+//   xmlHttp.setRequestHeader("Access-Control-Allow-Origin", "*");
+//   xmlHttp.setRequestHeader("Access-Control-Allow-Headers", "*");
+//   xmlHttp.setRequestHeader("Accept", "text/plain");
+//   xmlHttp.setRequestHeader("Content-Type", "text/plain");
+//   xmlHttp.send(null);
+//   // return xmlHttp.responseText;
+//   console.log(xmlHttp.responseText);
+// }
