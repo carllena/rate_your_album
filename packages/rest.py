@@ -7,7 +7,7 @@ from datetime import datetime as dt
 from http import HTTPStatus
 from packages.utils import hide_the_pass
 from packages.account import Account
-from packages.database_controller import DatabaseController
+from packages.album import Album
 
 logger = logging.getLogger(c.name)
 
@@ -82,5 +82,15 @@ def process_POST_request(payload, path, client_ip):
         else:
             response = "Bad Login or Password"
             http_status = HTTPStatus.BAD_REQUEST
+    elif str(path) == "/add_album":
+        new_album = Album(
+            payload["album_title"], payload["band"], payload["release_date"]
+        )
+        if new_album.add_album():
+            http_status = HTTPStatus.CREATED
+            response = "Album correctly inserted to database"
+        else:
+            http_status = HTTPStatus.BAD_REQUEST
+            response = "Album cannot be inserted to database"
     logger.debug("-- processing POST request: end")
     return http_status, response

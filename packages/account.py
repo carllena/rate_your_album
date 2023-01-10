@@ -35,7 +35,7 @@ class Account(DatabaseController):
             return True
 
     def authenticate(self):
-        query = f"SELECT * FROM users WHERE login = '{self.login}' AND password = '{self.password_hash}' LIMIT 1;"
+        query = f"SELECT * FROM users WHERE login = '{self.login}' AND password = '{self.password_hash}' AND disabled = 0 LIMIT 1;"
         if self.select_data(query):
             return True
         else:
