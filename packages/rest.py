@@ -91,6 +91,14 @@ def process_POST_request(payload, path, client_ip):
             response = "Album correctly inserted to database"
         else:
             http_status = HTTPStatus.BAD_REQUEST
-            response = "Album cannot be inserted to database"
+            response = "Album cannot be added to the database"
+    elif str(path) == "/rate_album":
+        album = Album(payload["album_title"], payload["band"], payload["release_date"])
+        if album.rate_the_album(payload["login"], payload["rate"]):
+            http_status = HTTPStatus.OK
+            response = "Album rating updated correctly"
+        else:
+            http_status = HTTPStatus.BAD_REQUEST
+            response = "Album rating update failed"
     logger.debug("-- processing POST request: end")
     return http_status, response

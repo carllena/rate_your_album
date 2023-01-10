@@ -24,3 +24,6 @@ class DatabaseController:
         except Exception as e:
             logger.warning(f"Exception: `{e}`")
         return False
+
+    def update_data(self, query, values):
+        pass

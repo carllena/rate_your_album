@@ -7,6 +7,8 @@ name = "RateYourAlbumAPI"
 version = "1.0.0"
 http_port = int(getenv("HTTPPORT", "5123"))
 
+rates = [str(i) for i in range(1, 11)]
+
 set()
 mysql_config = {
     "user": getenv("DB_USER", ""),
