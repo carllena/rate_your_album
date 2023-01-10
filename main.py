@@ -10,7 +10,9 @@ from threading import Thread
 import packages.config as c
 from http.server import BaseHTTPRequestHandler, HTTPServer
 from http import HTTPStatus
-from packages.database_controller import create_cursor, select_data, insert_data
+
+# from packages.database_controller import create_cursor, select_data, insert_data
+
 
 # ścieżka dla pliku z logami w przypadku stosowania LOGGING_FILE
 LOGFILE = "log/app.log"
@@ -47,8 +49,6 @@ logger = (
     )
     .Get()
 )
-
-# mydb, mycursor = create_cursor()
 
 
 class MyHandler(BaseHTTPRequestHandler):
@@ -100,8 +100,7 @@ class MyHandler(BaseHTTPRequestHandler):
             data = json.dumps(payload)
         else:
             payload = None
-        logger.info(payload)
-        logger.debug(f"Payload: `{payload}`")
+        logger.info(f"Client IP: `{self.client_address[0]}`, Payload: `{payload}`")
         path = str(self.path)
 
         http_status, response = process_POST_request(
@@ -150,7 +149,7 @@ def update_rejectlist():
         result = ["1.168.1.2", "192.168.0.227"]
         c.registration_reject_list = result
         logger.info(f"rejectlist updadet: {c.registration_reject_list}")
-        sleep(10)
+        sleep(10000)
 
 
 def main():
@@ -161,9 +160,9 @@ def main():
     logger.info(f"http server listening on `{local_ip}:{c.http_port}`")
     rejectlist_updater = Thread(target=update_rejectlist)
     rejectlist_updater.start()
-    while True:
-        print(c.registration_reject_list)
-        sleep(10)
+    # while True:
+    #     print(c.registration_reject_list)
+    #     sleep(10)
 
     # query = "INSERT INTO users (login, name, surname, password) VALUES (%s, %s, %s, %s)"
     # values = ("john123", "John", "Johnson", "johny12")

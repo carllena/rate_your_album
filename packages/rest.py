@@ -7,7 +7,7 @@ from datetime import datetime as dt
 from http import HTTPStatus
 from packages.utils import hide_the_pass
 from packages.account import Account
-from packages.database_controller import create_cursor, select_data, insert_data
+from packages.database_controller import DatabaseController
 
 logger = logging.getLogger(c.name)
 
@@ -35,11 +35,8 @@ def process_GET_request(path):
 
 def process_POST_request(payload, path, client_ip):
     logger.debug("-- processing POST request: start")
-    mydb, mycursor = create_cursor()
-    logger.info(f"Payload: {payload}")
-    payload["password"] = hide_the_pass(payload["password"], payload["login"])
-    logger.info(f"Payload: {payload}")
     if str(path) == "/create_account":
+        payload["password"] = hide_the_pass(payload["password"], payload["login"])
         if client_ip in c.registration_reject_list:
             return HTTPStatus.BAD_REQUEST, "Account not created"
         if "name" in payload:
@@ -49,7 +46,7 @@ def process_POST_request(payload, path, client_ip):
                 payload["surname"],
                 payload["password"],
             )
-            if new_account.create_account(mydb, mycursor, client_ip):
+            if new_account.create_account(client_ip):
                 response = f"Account created correctly"
                 http_status = HTTPStatus.OK
             else:
@@ -65,19 +62,21 @@ def process_POST_request(payload, path, client_ip):
             None,
             None,
         )
-        if new_account.check_login_availability(mycursor):
+        if new_account.check_login_availability():
             response = f"Login is available"
+            http_status = HTTPStatus.OK
         else:
             response = f"Login is not available"
-        http_status = HTTPStatus.OK
+            http_status = HTTPStatus.BAD_REQUEST
     elif str(path) == "/auth":
+        payload["password"] = hide_the_pass(payload["password"], payload["login"])
         new_account = Account(
             payload["login"],
             None,
             None,
             payload["password"],
         )
-        if new_account.authenticate(mycursor):
+        if new_account.authenticate():
             response = "Authorized"
             http_status = HTTPStatus.OK
         else:
