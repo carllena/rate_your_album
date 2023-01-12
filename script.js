@@ -4,17 +4,23 @@ function processCreatingAccount() {
   var nameInput = document.getElementById("name").value;
   var surnameInput = document.getElementById("lastname").value;
   // przyjąć wartość kodu z funkcji createAccount np. let responseCode
-  createAccount(
+  var responseJson = createAccount(
     "http://192.168.0.220:5123/create_account",
     loginInput,
     passwordInput,
     nameInput,
     surnameInput
   );
+
+  responseJson.then((data) => {
+    if (data.status_code == 200) {
+      alert(data.results.response);
+    } else {
+      document.getElementById("signup").reset();
+    }
+  });
   //if responseCode coś tam to przekierowanie na stronę logowania
   //w przeciwnym razie czy jest potrzeba coś robić? może tylko reset formularza
-
-  document.getElementById("signup").reset();
 }
 
 async function createAccount(
@@ -44,9 +50,12 @@ async function createAccount(
     },
     body: user,
   });
-  response.json().then((data) => {
-    console.log(data);
-  });
+  return response.json();
+  // response.json().then((data) => {
+  //   var statusCode = data.status_code;
+  //   var responseText = data.results.response;
+  // });
+  // return { statusCode, responseText };
   //return code od serwera
 }
 
