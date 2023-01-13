@@ -5,7 +5,7 @@ import logging, json
 import packages.config as c
 from datetime import datetime as dt
 from http import HTTPStatus
-from packages.utils import hide_the_pass
+from packages.utils import hide_the_pass, check_fingerprint
 from packages.account import Account
 from packages.album import Album
 
@@ -69,19 +69,28 @@ def process_POST_request(payload, path, client_ip):
             response = f"Login is not available"
             http_status = HTTPStatus.BAD_REQUEST
     elif str(path) == "/auth":
-        payload["password"] = hide_the_pass(payload["password"], payload["login"])
-        new_account = Account(
+        if not check_fingerprint(
             payload["login"],
-            None,
-            None,
-            payload["password"],
-        )
-        if new_account.authenticate():
-            response = "Authorized"
-            http_status = HTTPStatus.OK
-        else:
+            client_ip,
+            payload["front_timestamp"],
+            payload["fingerprint"],
+        ):
             response = "Bad Login or Password"
-            http_status = HTTPStatus.BAD_REQUEST
+            http_status = HTTPStatus.UNSUPPORTED_MEDIA_TYPE
+        else:
+            payload["password"] = hide_the_pass(payload["password"], payload["login"])
+            new_account = Account(
+                payload["login"],
+                None,
+                None,
+                payload["password"],
+            )
+            if new_account.authenticate():
+                response = "Authorized"
+                http_status = HTTPStatus.OK
+            else:
+                response = "Bad Login or Password"
+                http_status = HTTPStatus.BAD_REQUEST
     elif str(path) == "/add_album":
         new_album = Album(
             payload["album_title"], payload["band"], payload["release_date"]
