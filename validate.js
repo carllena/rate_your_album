@@ -45,6 +45,7 @@ loginInput.onkeyup = async function () {
 };
 
 var passwordLvl = 0;
+var rightName = 0;
 
 // Jak ktoś ma w imieniu 6 to i tak może przesłać dane. xD
 
@@ -57,6 +58,7 @@ function empty() {
   console.log(passwordLvl);
   if (
     passwordLvl < 4 ||
+    rightName < 2 ||
     password != confirmPassword ||
     !login ||
     !password ||
@@ -83,16 +85,19 @@ var nameInput = document.getElementById("name");
 var lastnameInput = document.getElementById("lastname");
 
 function validateName() {
+  rightName = 0;
   var letters = /^[a-zA-ZąćęłńóśźżĄĆĘŁŃÓŚŹŻ]+$/;
-  if (!nameInput.value.match(letters)) {
-    document.getElementById("nameValidate").style.display = "block";
-  } else {
+  if (nameInput.value.match(letters)) {
     document.getElementById("nameValidate").style.display = "none";
-  }
-  if (!lastnameInput.value.match(letters)) {
-    document.getElementById("lastnameValidate").style.display = "block";
+    rightName++;
   } else {
+    document.getElementById("nameValidate").style.display = "block";
+  }
+  if (lastnameInput.value.match(letters)) {
     document.getElementById("lastnameValidate").style.display = "none";
+    rightName++;
+  } else {
+    document.getElementById("lastnameValidate").style.display = "block";
   }
 }
 
