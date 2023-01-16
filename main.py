@@ -93,6 +93,8 @@ class MyHandler(BaseHTTPRequestHandler):
     def do_POST(self):
         logger.debug(f"Got POST request with path: `{self.path}`")
         method_name = "post"
+        print(self.headers)
+        user_agent = self.headers.get("User-Agent")
         if self.headers["Content-Length"]:
             self.data_string = self.rfile.read(int(self.headers["Content-Length"]))
             # logger.info(self.data_string)
@@ -104,7 +106,7 @@ class MyHandler(BaseHTTPRequestHandler):
         path = str(self.path)
 
         http_status, response = process_POST_request(
-            payload, path, self.client_address[0]
+            payload, path, self.client_address[0], user_agent
         )
         response_json = {
             "results": {

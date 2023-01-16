@@ -33,27 +33,36 @@ def process_GET_request(path):
     return http_status, response
 
 
-def process_POST_request(payload, path, client_ip):
+def process_POST_request(payload, path, client_ip, user_agent):
     logger.debug("-- processing POST request: start")
     if str(path) == "/create_account":
-        payload["password"] = hide_the_pass(payload["password"], payload["login"])
-        if client_ip in c.registration_reject_list:
-            return HTTPStatus.BAD_REQUEST, "Account not created"
-        if "name" in payload:
-            new_account = Account(
-                payload["login"],
-                payload["name"],
-                payload["surname"],
-                payload["password"],
-            )
-            if new_account.create_account(client_ip):
-                response = f"Account created correctly"
-                http_status = HTTPStatus.OK
-            else:
-                response = f"Account not created"
-                http_status = HTTPStatus.BAD_REQUEST
+        if not check_fingerprint(
+            payload["login"],
+            user_agent,
+            payload["timestamp"],
+            payload["fingerprint"],
+        ):
+            response = "Request not from authorized frontend"
+            http_status = HTTPStatus.UNSUPPORTED_MEDIA_TYPE
         else:
-            response = f"bad payload: {payload.keys()}"
+            payload["password"] = hide_the_pass(payload["password"], payload["login"])
+            if client_ip in c.registration_reject_list:
+                return HTTPStatus.BAD_REQUEST, "Account not created"
+            if "name" in payload:
+                new_account = Account(
+                    payload["login"],
+                    payload["name"],
+                    payload["surname"],
+                    payload["password"],
+                )
+                if new_account.create_account(client_ip):
+                    response = f"Account created correctly"
+                    http_status = HTTPStatus.OK
+                else:
+                    response = f"Account not created"
+                    http_status = HTTPStatus.BAD_REQUEST
+            else:
+                response = f"bad payload: {payload.keys()}"
 
     elif str(path) == "/free_login":
         new_account = Account(
@@ -71,12 +80,12 @@ def process_POST_request(payload, path, client_ip):
     elif str(path) == "/auth":
         if not check_fingerprint(
             payload["login"],
-            client_ip,
-            payload["front_timestamp"],
+            user_agent,
+            payload["timestamp"],
             payload["fingerprint"],
         ):
-            response = "Bad Login or Password"
-            http_status = HTTPStatus.UNSUPPORTED_MEDIA_TYPE
+            response = "Request not from authorized frontend"
+            http_status = HTTPStatus.OK
         else:
             payload["password"] = hide_the_pass(payload["password"], payload["login"])
             new_account = Account(

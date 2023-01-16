@@ -7,8 +7,8 @@ def hide_the_pass(password_plain, login):
     return sha256(password_with_salt.encode()).hexdigest()
 
 
-def check_fingerprint(login, client_ip, timestamp, fingerprint):
-    string = f"{timestamp},{login},{client_ip}"
+def check_fingerprint(login, user_agent, timestamp, fingerprint):
+    string = f"{login},{user_agent},{timestamp}"
     if md5(string.encode()).hexdigest() == fingerprint:
         return True
     else:
