@@ -17,6 +17,7 @@ loginInput.onkeyup = async function () {
     const response = await fetch("http://192.168.0.220:5123/free_login", {
       method: "POST",
       headers: {
+        "User-Agent": navigator.userAgent,
         "Content-Type": "application/json",
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "*",
