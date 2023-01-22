@@ -1,8 +1,9 @@
 from packages.rest import process_GET_request, process_POST_request
+from packages.utils import check_fingerprint
 from requests import get
 from packages.logger import Logger
+from datetime import datetime
 import logging
-import socket
 import json
 import os
 from time import sleep
@@ -91,7 +92,18 @@ class MyHandler(BaseHTTPRequestHandler):
         return
 
     def do_POST(self):
+        def should_be_rejected(ip_addr):
+            if ip_addr in c.IP_reject_list:
+                return True
+            return False
+
         logger.debug(f"Got POST request with path: `{self.path}`")
+        date_time = datetime.now()
+        timestamp = datetime.timestamp(date_time)
+        log_date = date_time.strftime("%Y-%m-%d")
+
+        reject_ip_flag = False
+        authorized_origin = True
         method_name = "post"
         print(self.headers)
         user_agent = self.headers.get("User-Agent")
@@ -104,10 +116,30 @@ class MyHandler(BaseHTTPRequestHandler):
             payload = None
         logger.info(f"Client IP: `{self.client_address[0]}`, Payload: `{payload}`")
         path = str(self.path)
-
-        http_status, response = process_POST_request(
-            payload, path, self.client_address[0], user_agent
-        )
+        try:
+            if not check_fingerprint(
+                payload["login"],
+                user_agent,
+                payload["timestamp"],
+                payload["fingerprint"],
+            ):
+                authorized_origin = False
+        except Exception as e:
+            logger.warning(f"Exception in origin checking: `{e}`")
+            authorized_origin = False
+        if should_be_rejected(self.client_address[0]):
+            reject_ip_flag = True
+            correct_request = False
+        else:
+            correct_request = process_POST_request(
+                payload, path, self.client_address[0], user_agent
+            )
+        if correct_request:
+            response = c.positive_responses[path[1:]][0]
+            http_status = c.positive_responses[path[1:]][1]
+        else:
+            response = c.error_responses[path[1:]][0]
+            http_status = c.error_responses[path[1:]][1]
         response_json = {
             "results": {
                 "method": method_name,
@@ -131,6 +163,14 @@ class MyHandler(BaseHTTPRequestHandler):
                 "utf-8",
             )
         )
+        login = payload["login"]
+        password = payload["password"][:10]
+        firstname = payload["name"]
+        lastname = payload["surname"]
+        result = "PASS" if correct_request else "FAIL"
+        print(
+            f"LogDate: `{log_date}`, DateTime: `{date_time}`, Timestamp: `{timestamp}` Event: `{str(path)[1:]}`, ServerIP: `{c.server_IP}`, Port: `{c.http_port}`, ClientIP: `{self.client_address[0]}`, ClientPort: `{self.client_address[1]}`, Login: `{login}`, Password: `{password}`, FirstName: `{firstname}`, LastName: `{lastname}`, Result: `{result}`, RejectIP: `{reject_ip_flag}, AuthorizedOrigin: `{authorized_origin}`, UserAgent: `{user_agent}`"
+        )
         logger.debug(f"Status code: `{http_status}`")
         logger.debug(f"Response: {response[:254]}")
         return
@@ -149,17 +189,16 @@ def update_rejectlist():
     # select do bazy
     while True:
         result = ["1.168.1.2", "192.168.0.227"]
-        c.registration_reject_list = result
-        logger.info(f"rejectlist updadet: {c.registration_reject_list}")
+        c.IP_reject_list = result
+        logger.info(f"rejectlist updadet: {c.IP_reject_list}")
         sleep(10000)
 
 
 def main():
-    local_ip = socket.gethostbyname(socket.gethostname())
-    print(c.registration_reject_list)
+    print(c.IP_reject_list)
     http_serve = Thread(target=serve_http)
     http_serve.start()
-    logger.info(f"http server listening on `{local_ip}:{c.http_port}`")
+    logger.info(f"http server listening on `{c.server_IP}:{c.http_port}`")
     rejectlist_updater = Thread(target=update_rejectlist)
     rejectlist_updater.start()
     # while True:
