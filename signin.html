@@ -33,16 +33,18 @@
           <label for="password">Enter your password:</label><br />
           <input
             type="password"
-            id="password"
-            name="password"
+            id="logPassword"
+            name="logPassword"
             placeholder="Enter password"
             required
           /><br />
-          <button type="button" onclick="sendDataToCreateAccount()">
-            Log in
-          </button>
+          <div id="passwordCompatibility">
+            <p class="invalid">Password is not correct, try again</p>
+          </div>
+          <button type="button" onclick="processLoginUser()">Log in</button>
         </form>
       </div>
     </main>
   </body>
+  <script src="signin.js"></script>
 </html>

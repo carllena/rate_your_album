@@ -9,7 +9,7 @@ function processCreatingAccount() {
     loginInput + "," + userAgent + "," + currentTimestamp
   ).toString();
   var responseJson = createAccount(
-    "http://192.168.0.220:5123/create_account",
+    "http://192.168.0.221:5123/create_account",
     loginInput,
     passwordInput,
     nameInput,

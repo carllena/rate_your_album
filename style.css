@@ -88,6 +88,11 @@ input {
   margin: 20px 30px;
 }
 
+.logOut {
+  float: right;
+  margin: 20px 30px;
+}
+
 a:link {
   color: white;
   text-decoration: none;
@@ -127,7 +132,8 @@ button:disabled {
 #firstValidate,
 #secondValidate,
 #nameValidate,
-#lastnameValidate {
+#lastnameValidate,
+#passwordCompatibility {
   display: none;
   width: 70%;
   background: #f1f1f1;
@@ -140,7 +146,8 @@ button:disabled {
 #firstValidate p,
 #secondValidate p,
 #nameValidate p,
-#lastnameValidate p {
+#lastnameValidate p,
+#passwordCompatibility p {
   font-size: 12px;
 }
 
